@@ -71,7 +71,7 @@ export const getAdminProducts = TryCatch(
 
 export const getSingleProduct = TryCatch(
   async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
-    const product = await ProductsModel.findById(req.params.id);
+    const product = await ProductsModel.findById((req.params as any).id);
 
     if (!product) return next(new ErrorHandler("Product Not found", 404));
 
@@ -113,7 +113,7 @@ export const updateProduct = TryCatch(async (req, res, next) => {
 
 export const deleteProduct = TryCatch(
   async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
-    const product = await ProductsModel.findById(req.params.id);
+    const product = await ProductsModel.findById((req.params as any).id);
     if (!product) return next(new ErrorHandler("Product Not Found", 404));
     rm(product.photo!, () => {
       console.log("Old Photo Deleted Successfully");
@@ -121,7 +121,7 @@ export const deleteProduct = TryCatch(
     await product.deleteOne();
     return res.status(200).json({
       success: true,
-      product
+      message: "Product Deleted Successfully"
     });
   }
 );

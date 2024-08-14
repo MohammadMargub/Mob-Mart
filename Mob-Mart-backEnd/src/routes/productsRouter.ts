@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProduct,
+  deleteProduct,
   getAdminProducts,
   getLatestProduct,
   getProductCategory,
@@ -22,6 +23,6 @@ app.get("/categories", getProductCategory);
 
 app.get("/admin-products", getAdminProducts);
 
-app.route(":/id").get(getSingleProduct).put(singleUpload, updateProduct);
+app.route(":/id").get(getSingleProduct).put(singleUpload, updateProduct).delete(deleteProduct);
 
 export default app;
