@@ -7,6 +7,7 @@ const schema = new mongoose.Schema(
     //   // required: [true, "Please Enter ID"],
     //   // unique: true
     // },
+
     name: {
       type: String,
       required: [true, "Please Enter Name"]
@@ -26,6 +27,10 @@ const schema = new mongoose.Schema(
     company: {
       type: String,
       required: [true, "Please add Company Name"]
+    },
+
+    id: {
+      type: String
     }
   },
   {
