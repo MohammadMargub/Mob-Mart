@@ -1,0 +1,64 @@
+{
+  "categories": [
+    {
+      "value": 100,
+      "heading": "SAMSUNG"
+    },
+
+    {
+      "value": 50,
+      "heading": "APPLE"
+    },
+    {
+      "value": 80,
+      "heading": "MI"
+    },
+    {
+      "value": 60,
+      "heading": "REALME"
+    },
+    {
+      "value": 40,
+      "heading": "MOTO"
+    },
+    {
+      "value": 88,
+      "heading": "ONE-PLUS"
+    },
+    {
+      "value": 20,
+      "heading": "NOTHING"
+    }
+  ],
+
+  "transaction": [
+    {
+      "_id": "ABC1011",
+      "amount": 4000,
+      "quantity": 4,
+      "discount": 300,
+      "status": "Processing"
+    },
+    {
+      "_id": "ABC1012",
+      "amount": 5100,
+      "quantity": 2,
+      "discount": 900,
+      "status": "Processing"
+    },
+    {
+      "_id": "ABC1013",
+      "amount": 13000,
+      "quantity": 91,
+      "discount": 0,
+      "status": "Shipped"
+    },
+    {
+      "_id": "ABC1014",
+      "amount": 2300,
+      "quantity": 4,
+      "discount": 2000,
+      "status": "Processing"
+    }
+  ]
+}
