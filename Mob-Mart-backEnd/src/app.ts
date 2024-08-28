@@ -2,11 +2,17 @@ import express from "express";
 
 import userRoutes from "./routes/userRouter.js";
 import productRoutes from "./routes/productsRouter.js";
-import { connectDB } from "./utils/features.js";
+import { connectDB } from "./database/database.js";
 import { errorMiddleware } from "./middlewares/error.js";
+import NodeCache from "node-cache";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "./config.env" });
+
+export const myCache = new NodeCache();
 
 const app = express();
-const port = 7000;
+const port = process.env.PORT || 3000;
 
 connectDB();
 

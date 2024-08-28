@@ -3,6 +3,8 @@ import {
   createProduct,
   deleteProduct,
   getAdminProducts,
+  getAllMobile,
+  getAllProducts,
   getLatestProduct,
   getProductCategory,
   getSingleProduct,
@@ -21,8 +23,16 @@ app.get("/latest", getLatestProduct);
 
 app.get("/categories", getProductCategory);
 
-app.get("/admin-products", getAdminProducts);
+app.get("/admin-products", getAllProducts);
 
-app.route(":/id").get(getSingleProduct).put(singleUpload, updateProduct).delete(deleteProduct);
+app.get("/all", getAllProducts);
+
+app.get("/all-mobile", getAllMobile);
+
+app
+  .route("/:id")
+  .get(getSingleProduct)
+  .put(adminOnly, singleUpload, updateProduct)
+  .delete(adminOnly, deleteProduct);
 
 export default app;

@@ -1,10 +1,5 @@
 import express from "express";
-import {
-  deleteUser,
-  getAllUsers,
-  getUser,
-  newUser,
-} from "../controllers/userController.js";
+import { deleteUser, getAllUsers, getUser, newUser } from "../controllers/userController.js";
 import { adminOnly } from "../middlewares/auth.js";
 
 const app = express.Router();
