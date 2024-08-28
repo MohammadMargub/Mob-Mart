@@ -19,6 +19,32 @@ export interface NewProductRequestBody {
   id: string;
 }
 
+export type SearchRequestQuery = {
+  company?: string;
+  page?: string;
+  price?: number;
+  search?: string;
+  sort?: string;
+};
+
+export interface BaseQuery {
+  name?: {
+    $regex: string;
+    $options: string;
+  };
+
+  price?: {
+    $lte: number;
+  };
+  company?: string;
+}
+
+export type InvalidateCacheProps = {
+  product?: boolean;
+  order?: boolean;
+  admin?: boolean;
+};
+
 export type ControllerType = (
   req: Request<Record<string, unknown>>,
   res: Response,
