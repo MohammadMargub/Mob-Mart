@@ -45,6 +45,8 @@ export type InvalidateCacheProps = {
   admin?: boolean;
 };
 
+export interface NewOrderRequestBody {}
+
 export type ControllerType = (
   req: Request<Record<string, unknown>>,
   res: Response,

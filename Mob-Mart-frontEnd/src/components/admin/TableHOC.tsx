@@ -10,7 +10,7 @@ import {
   TableOptions,
 } from "react-table";
 
-function TableHOC<T extends Object>(
+function tableHOC<T extends Object>(
   columns: Column<T>[],
   data: T[],
   containerClassname: string,
@@ -97,4 +97,4 @@ function TableHOC<T extends Object>(
   };
 }
 
-export default TableHOC;
+export default tableHOC;

@@ -31,23 +31,21 @@ const total = subtotal + tax + shippingCharges;
 
 const Cart = () => {
   const [cuponCode, setCuponCode] = useState<string>("");
-  const [isValidCuponCode, setisValidCuponCode] = useState<boolean>(false);
+  const [isValidCuponCode, setIsValidCuponCode] = useState<boolean>(false);
 
   useEffect(() => {
-    const timeOutId = setTimeout(() => {
-      if (Math.random() > 0.5) setisValidCuponCode(true);
-      else setisValidCuponCode(false);
+    const timeoutId = setTimeout(() => {
+      setIsValidCuponCode(Math.random() > 0.5);
     }, 1000);
-    return () => {
-      clearTimeout(timeOutId);
-    };
+
+    return () => clearTimeout(timeoutId);
   }, [cuponCode]);
 
   return (
     <div className="cart">
       <main>
-        {cartItems.map((i, index) => (
-          <CartItem key={index} cartItem={i} />
+        {cartItems.map((cartItem) => (
+          <CartItem key={cartItem.productId} cartItem={cartItem} />
         ))}{" "}
       </main>
       <aside>

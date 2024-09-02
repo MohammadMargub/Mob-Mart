@@ -1,6 +1,6 @@
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { lazy } from "react";
+
 import Loader from "../components/loader";
 import Header from "../components/header";
 import Login from "../pages/login";
@@ -23,8 +23,6 @@ const Orders = lazy(() => import("../pages/orders"));
 
 const OrderDetails = lazy(() => import("../pages/orderDetails"));
 
-// const Stopwatch = lazy(() => import("../pages/admin/apps/stopwatch"));
-// const Toss = lazy(() => import("../pages/admin/apps/toss"));
 const NewProduct = lazy(() => import("../pages/admin/management/newproduct"));
 const ProductManagement = lazy(
   () => import("../pages/admin/management/productmanagement")

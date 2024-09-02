@@ -88,7 +88,7 @@ const arr: Array<DataType> = [
 ];
 
 const Customers = () => {
-  const [rows, setRows] = useState<DataType[]>(arr);
+  const [rows] = useState<DataType[]>(arr);
 
   const Table = TableHOC<DataType>(
     columns,

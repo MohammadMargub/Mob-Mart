@@ -24,10 +24,11 @@ const Stopwatch = () => {
 
   useEffect(() => {
     let intervalID: NodeJS.Timeout;
-    if (isRunning)
+    if (isRunning) {
       intervalID = setInterval(() => {
         setTime((prev) => prev + 1);
       }, 1000);
+    }
 
     return () => {
       clearInterval(intervalID);
