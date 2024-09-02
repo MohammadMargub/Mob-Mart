@@ -10,37 +10,37 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const user = { _id: "gss", role: "admin" };
-  const [isopen, setIsOpen] = useState<boolean>(false);
+  const [isopen, setIsopen] = useState<boolean>(false);
 
   const logoutHandler = () => {
-    setIsOpen(false);
+    setIsopen(false);
   };
 
   return (
     <nav className="header">
-      <Link onClick={() => setIsOpen(false)} to={"/"}>
+      <Link onClick={() => setIsopen(false)} to={"/"}>
         Home{" "}
       </Link>
-      <Link onClick={() => setIsOpen(false)} to={"/search"}>
+      <Link onClick={() => setIsopen(false)} to={"/search"}>
         <FaSearch />
       </Link>
-      <Link onClick={() => setIsOpen(false)} to={"/cart"}>
+      <Link onClick={() => setIsopen(false)} to={"/cart"}>
         <FaShoppingBag />
       </Link>
 
       {user?._id ? (
         <>
-          <button onClick={() => setIsOpen((prev) => !prev)}>
+          <button onClick={() => setIsopen((prev) => !prev)}>
             <FaUser />
           </button>
           <dialog open={isopen}>
             <div>
               {user.role === "admin" && (
-                <Link onClick={() => setIsOpen(false)} to="/admin/dashboard">
+                <Link onClick={() => setIsopen(false)} to="/admin/dashboard">
                   Admin
                 </Link>
               )}
-              <Link onClick={() => setIsOpen(false)} to="/orders">
+              <Link onClick={() => setIsopen(false)} to="/orders">
                 Orders
               </Link>
               <button onClick={() => logoutHandler}>

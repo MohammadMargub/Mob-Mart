@@ -2,14 +2,14 @@ import { fileURLToPath } from "url";
 import path from "path";
 import dotenv from "dotenv";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
-const envPath = path.resolve(__dirname, "../../.env");
+const envPath = path.resolve(dirname, "../../.env");
 console.log("Loading .env file from:", envPath);
 dotenv.config({ path: envPath });
 
-console.log("DB_HOST:", process.env.DB_URL);
+console.log("DB_URL:", process.env.DB_URL);
 console.log("DB_NAME:", process.env.DB_NAME);
 
 const { DB_URL, DB_NAME } = process.env;

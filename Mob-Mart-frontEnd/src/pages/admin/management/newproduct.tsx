@@ -7,19 +7,16 @@ const NewProduct = () => {
   const [price, setPrice] = useState<number>(1000);
   const [stock, setStock] = useState<number>(1);
   const [photoPrev, setPhotoPrev] = useState<string>("");
-  const [photo, setPhoto] = useState<File>();
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const file: File | undefined = e.target.files?.[0];
-
-    const reader: FileReader = new FileReader();
+    const file = e.target.files?.[0];
 
     if (file) {
+      const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
           setPhotoPrev(reader.result);
-          setPhoto(file);
         }
       };
     }
@@ -33,7 +30,7 @@ const NewProduct = () => {
           <form>
             <h2>New Product</h2>
             <div>
-              <label>Name</label>
+              <label htmlFor="name">Name</label>
               <input
                 type="text"
                 placeholder="Name"
@@ -42,7 +39,7 @@ const NewProduct = () => {
               />
             </div>
             <div>
-              <label>Price</label>
+              <label htmlFor="price">Price</label>
               <input
                 type="number"
                 placeholder="Price"
@@ -51,7 +48,7 @@ const NewProduct = () => {
               />
             </div>
             <div>
-              <label>Stock</label>
+              <label htmlFor="stock">Stock</label>
               <input
                 type="number"
                 placeholder="Stock"
@@ -61,7 +58,7 @@ const NewProduct = () => {
             </div>
 
             <div>
-              <label>Category</label>
+              <label htmlFor="category">Category</label>
               <input
                 type="text"
                 placeholder="eg. laptop, camera etc"
@@ -71,11 +68,11 @@ const NewProduct = () => {
             </div>
 
             <div>
-              <label>Photo</label>
+              <label htmlFor="photo">Photo</label>
               <input type="file" onChange={changeImageHandler} />
             </div>
 
-            {photoPrev && <img src={photoPrev} alt="New Image" />}
+            {photoPrev && <img src={photoPrev} alt="" />}
             <button type="submit">Create</button>
           </form>
         </article>

@@ -11,7 +11,7 @@ const Login = () => {
         <h1 className="heading">Login</h1>
 
         <div>
-          <label>Gender</label>
+          <label htmlFor="gender">Gender</label>
           <select value={gender} onChange={(e) => setGender(e.target.value)}>
             <option value="">Select Gender</option>
             <option value="male">Male</option>
@@ -20,7 +20,7 @@ const Login = () => {
         </div>
 
         <div>
-          <label>Date of birth</label>
+          <label htmlFor="DOB">Date of birth</label>
           <input
             type="date"
             value={date}

@@ -10,14 +10,13 @@ const Productmanagement = () => {
   const [stock, setStock] = useState<number>(10);
   const [name, setName] = useState<string>("Puma Shoes");
   const [photo, setPhoto] = useState<string>(img);
-  const [category, setCategory] = useState<string>("footwear");
+  const [category] = useState<string>("footwear");
 
   const [priceUpdate, setPriceUpdate] = useState<number>(price);
   const [stockUpdate, setStockUpdate] = useState<number>(stock);
   const [nameUpdate, setNameUpdate] = useState<string>(name);
   const [categoryUpdate, setCategoryUpdate] = useState<string>(category);
   const [photoUpdate, setPhotoUpdate] = useState<string>(photo);
-  const [photoFile, setPhotoFile] = useState<File>();
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const file: File | undefined = e.target.files?.[0];
@@ -29,7 +28,6 @@ const Productmanagement = () => {
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
           setPhotoUpdate(reader.result);
-          setPhotoFile(file);
         }
       };
     }
@@ -65,7 +63,7 @@ const Productmanagement = () => {
           <form onSubmit={submitHandler}>
             <h2>Manage</h2>
             <div>
-              <label>Name</label>
+              <label htmlFor="name">Name</label>
               <input
                 type="text"
                 placeholder="Name"
@@ -74,7 +72,7 @@ const Productmanagement = () => {
               />
             </div>
             <div>
-              <label>Price</label>
+              <label htmlFor="price">Price</label>
               <input
                 type="number"
                 placeholder="Price"
@@ -83,7 +81,7 @@ const Productmanagement = () => {
               />
             </div>
             <div>
-              <label>Stock</label>
+              <label htmlFor="stock">Stock</label>
               <input
                 type="number"
                 placeholder="Stock"
@@ -93,7 +91,7 @@ const Productmanagement = () => {
             </div>
 
             <div>
-              <label>Category</label>
+              <label htmlFor="category">Category</label>
               <input
                 type="text"
                 placeholder="eg. laptop, camera etc"
@@ -103,11 +101,11 @@ const Productmanagement = () => {
             </div>
 
             <div>
-              <label>Photo</label>
+              <label htmlFor="photo">Photo</label>
               <input type="file" onChange={changeImageHandler} />
             </div>
 
-            {photoUpdate && <img src={photoUpdate} alt="New Image" />}
+            {photoUpdate && <img src={photoUpdate} alt="" />}
             <button type="submit">Update</button>
           </form>
         </article>

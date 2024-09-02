@@ -60,7 +60,7 @@ const arr: Array<DataType> = [
 ];
 
 const Products = () => {
-  const [rows, setRows] = useState<DataType[]>(arr);
+  const [rows] = useState<DataType[]>(arr);
 
   const Table = TableHOC<DataType>(
     columns,

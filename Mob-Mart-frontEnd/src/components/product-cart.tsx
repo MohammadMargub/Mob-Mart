@@ -9,15 +9,12 @@ type ProductsProps = {
   handler: () => void;
 };
 
-// const server = `My-server`;
-
 const ProductCart = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   productId,
   photo,
   name,
   price,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   stock,
   handler,
 }: ProductsProps) => {

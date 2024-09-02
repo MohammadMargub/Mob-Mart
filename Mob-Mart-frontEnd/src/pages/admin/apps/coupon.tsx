@@ -23,17 +23,24 @@ const Coupon = () => {
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!includeNumbers && !includeCharacters && !includeSymbols)
+    if (!includeNumbers && !includeCharacters && !includeSymbols) {
       return alert("Please Select One At Least");
+    }
 
     let result: string = prefix || "";
     const loopLength: number = size - result.length;
 
     for (let i = 0; i < loopLength; i++) {
       let entireString: string = "";
-      if (includeCharacters) entireString += allLetters;
-      if (includeNumbers) entireString += allNumbers;
-      if (includeSymbols) entireString += allSymbols;
+      if (includeCharacters) {
+        entireString += allLetters;
+      }
+      if (includeNumbers) {
+        entireString += allNumbers;
+      }
+      if (includeSymbols) {
+        entireString += allSymbols;
+      }
 
       const randomNum: number = ~~(Math.random() * entireString.length);
       result += entireString[randomNum];
@@ -99,10 +106,15 @@ const Coupon = () => {
 
           {coupon && (
             <code>
-              {coupon}{" "}
-              <span onClick={() => copyText(coupon)}>
+              {coupon}
+              <input
+                role="button"
+                tabIndex={0}
+                onClick={() => copyText(coupon)}
+                onKeyDown={() => {}}
+              >
                 {isCopied ? "Copied" : "Copy"}
-              </span>{" "}
+              </input>
             </code>
           )}
         </section>

@@ -12,7 +12,6 @@ interface Iuser extends Document {
   createdAt: Date;
   updatedAt: Date;
   category: string;
-  //   Virtual Attribute
   age: number;
 }
 
