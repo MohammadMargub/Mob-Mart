@@ -2,6 +2,9 @@ import express from "express";
 
 import userRoutes from "./routes/userRouter.js";
 import productRoutes from "./routes/productsRouter.js";
+import orderRoutes from "./routes/orderRouter.js";
+import paymentRoutes from "./routes/payment.js";
+import statistics from "./routes/statistics.js";
 import { connectDB } from "./database/database.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import NodeCache from "node-cache";
@@ -25,9 +28,17 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/v1/user", userRoutes);
+
 app.use("/api/v1/products", productRoutes);
 
+app.use("/api/v1/orders", orderRoutes);
+
+app.use("/api/v1/payment", paymentRoutes);
+
+app.use("/api/v1/statistics", statistics);
+
 app.use("/uploads", express.static("uploads"));
+
 app.use(errorMiddleware);
 
 app.listen(port, () => {

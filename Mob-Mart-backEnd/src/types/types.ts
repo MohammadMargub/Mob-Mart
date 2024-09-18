@@ -43,9 +43,39 @@ export type InvalidateCacheProps = {
   product?: boolean;
   order?: boolean;
   admin?: boolean;
+  userId?: string;
+  orderId?: string;
+  productId?: string | string[];
 };
 
-export interface NewOrderRequestBody {}
+export type orderItemType = {
+  name: string;
+  photo: string;
+  price: number;
+  quantity: number;
+  productId: string;
+};
+
+export type shippingInfoType = {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: number;
+};
+
+export interface NewOrderRequestBody {
+  shippingInfo: {};
+  user: string;
+  price: number;
+  subTotal: number;
+  tax: number;
+  shippingCharges: number;
+  discount: number;
+  total: number;
+  orderItems: orderItemType[];
+  company: string;
+}
 
 export type ControllerType = (
   req: Request<Record<string, unknown>>,
