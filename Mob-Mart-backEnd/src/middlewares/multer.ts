@@ -1,5 +1,5 @@
 import multer from "multer";
-import { v4 as uuid } from "uuid";
+import { ObjectId } from "mongodb";
 
 const storage = multer.diskStorage({
   destination(_req, _file, callback) {
@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
   },
 
   filename(_req, file, callback) {
-    const id = uuid();
+    const id = new ObjectId().toString();
     const extName = file.originalname.split(".").pop();
     callback(null, `${id}.${extName}`);
   }

@@ -1,60 +1,64 @@
 import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid";
+
+interface IOrder extends Document {
+  total: number;
+}
 
 const schema = new mongoose.Schema(
   {
     product_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: [true, "Please Enter ID"],
-      unique: true,
-      default: uuidv4
+      default: () => new mongoose.Types.ObjectId(), // This will generate a MongoDB ObjectId
+      unique: true
     },
 
     name: {
-      type: String,
-      required: [true, "Please Enter Name"]
+      type: String
     },
-    photo: {
-      type: String,
-      required: [true, "Please add Photo"]
-    },
+
     price: {
       type: String,
       required: [true, "Please add Price"]
     },
-    stocks: {
-      type: Number,
-      required: [true, "Please add Stocks"]
-    },
+
     company: {
+      enum: ["Apple", "Samsung", "Xiaomi", "OnePlus", "Oppo", "Vivo", "Huawei", "Google"],
       type: String,
       required: [true, "Please add Company Name"]
     },
-    country: {
-      type: String,
-      required: [true, "Please add country Name"]
-    },
-    State: {
-      type: String,
-      required: [true, "Please add State"]
-    },
-    City: {
-      type: String,
-      required: [true, "Please add a City Name"]
-    },
-    shipping_chargres: {
-      type: Number,
-      required: [true, "Please add Shipping Charges"]
-    },
+
     discount: {
       type: Number,
       default: 0
     },
+
+    user: {
+      type: String,
+      ref: "User",
+      required: true
+    },
+
     status: {
       type: String,
       enum: ["In-Process", "Shipping", "Delivered"],
       default: "In-Process"
     },
+
+    tax: {
+      type: Number,
+      required: true
+    },
+
+    total: {
+      type: Number,
+      required: true
+    },
+
+    subTotal: {
+      type: Number
+    },
+
     orderItems: [
       {
         name: String,
@@ -66,7 +70,38 @@ const schema = new mongoose.Schema(
           ref: "Product"
         }
       }
-    ]
+    ],
+
+    shippingCharges: {
+      type: Number
+    },
+
+    shippingInfo: {
+      address: {
+        type: String,
+        required: true
+      },
+
+      city: {
+        type: String,
+        required: true
+      },
+
+      state: {
+        type: String,
+        required: true
+      },
+
+      country: {
+        type: String,
+        required: true
+      },
+
+      pinCode: {
+        type: Number,
+        required: true
+      }
+    }
   },
 
   {

@@ -4,9 +4,9 @@ import { ControllerType } from "../types/types.js";
 
 export const errorMiddleware = (
   err: ErrorHandler,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   err.message ||= "Internal Server Error";
   err.statusCode ||= 500;

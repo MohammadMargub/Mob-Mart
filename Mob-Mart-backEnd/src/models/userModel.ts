@@ -13,6 +13,7 @@ interface Iuser extends Document {
   updatedAt: Date;
   category: string;
   age: number;
+  total: number;
 }
 
 const schema = new mongoose.Schema(

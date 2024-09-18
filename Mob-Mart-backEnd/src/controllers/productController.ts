@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { tryCatch } from "../middlewares/error.js";
 import { BaseQuery, NewProductRequestBody, SearchRequestQuery } from "../types/types.js";
-import { ProductsModel } from "../models/products.js";
+import { ProductsModel } from "../models/productsModel.js";
 import ErrorHandler from "../utils/utility-class.js";
 import { rm } from "fs";
 import { myCache } from "../app.js";
@@ -232,7 +232,7 @@ export const updateProduct = tryCatch(async (req, res, next) => {
 
   await product.save();
 
-  await invalidateCache({ product: true });
+  await invalidateCache({ product: true, productId: String(product._id) });
 
   return res.status(200).json({
     success: true,
@@ -251,6 +251,8 @@ export const deleteProduct = tryCatch(
       console.log("Old Photo Deleted Successfully");
     });
     await product.deleteOne();
+    await invalidateCache({ product: true, productId: String(product._id) });
+
     return res.status(200).json({
       success: true,
       message: "ProductsModel Deleted Successfully"
