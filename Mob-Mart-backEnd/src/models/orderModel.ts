@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
 
-interface IOrder extends Document {
-  total: number;
-}
-
 const schema = new mongoose.Schema(
   {
     product_id: {

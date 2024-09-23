@@ -1,21 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-interface Iuser extends Document {
-  _id: string;
-  name: string;
-  photo: string;
-  email: string;
-  role: "admin" | "user";
-  gender: "Male " | "Female" | "Trans";
-  dob: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  category: string;
-  age: number;
-  total: number;
-}
-
 const schema = new mongoose.Schema(
   {
     _id: {
@@ -69,4 +54,4 @@ schema.virtual("age").get(function () {
   }
   return age;
 });
-export const User = mongoose.model<Iuser>("User", schema);
+export const User = mongoose.model("User", schema);
