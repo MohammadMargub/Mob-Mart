@@ -64,6 +64,21 @@ export type shippingInfoType = {
   pincode: number;
 };
 
+export interface Iuser extends Document {
+  _id: string;
+  name: string;
+  photo: string;
+  email: string;
+  role: "admin" | "user";
+  gender: "Male " | "Female" | "Trans";
+  dob: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  category: string;
+  age: number;
+  total: number;
+}
+
 export interface NewOrderRequestBody {
   shippingInfo: {};
   user: string;
