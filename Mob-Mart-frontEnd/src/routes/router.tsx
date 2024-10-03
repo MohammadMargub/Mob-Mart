@@ -1,14 +1,13 @@
 import { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-
 import Loader from "../components/loader";
 import Header from "../components/header";
 import Login from "../pages/login";
+import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("../pages/home"));
 const Search = lazy(() => import("../pages/search"));
 const Cart = lazy(() => import("../pages/cart"));
-
 const Shipping = lazy(() => import("../pages/shipping"));
 
 const Dashboard = lazy(() => import("../pages/admin/dashboard"));
@@ -76,6 +75,8 @@ const AppRouter = () => {
           ;
         </Routes>
       </Suspense>
+
+      <Toaster position="bottom-center" />
     </Router>
   );
 };

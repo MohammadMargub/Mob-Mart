@@ -7,11 +7,20 @@ export type CartItem = {
   stock: number;
 };
 
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  gender: string;
+  role: string;
+  photo: string;
+  dob: string;
+}
+
 export type OrderItem = Omit<CartItem, "stock"> & { _id: string };
 
 export type Order = {
   orderItems: OrderItem[];
-  //   shippingInfo: ShippingInfo;
   subtotal: number;
   tax: number;
   shippingCharges: number;
