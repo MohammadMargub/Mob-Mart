@@ -11,8 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
-
-
+.env
+.env.development
+.env.staging
+.env.production
 package-lock.json
 
 # Editor directories and files

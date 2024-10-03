@@ -83,10 +83,10 @@ export const getAllProducts = tryCatch(
     const skip = limit * (page - 1);
 
     const baseQuery: BaseQuery = {
-      // price: {
-      //   $lte: Number(price)
-      // },
-      // company
+      price: {
+        $lte: Number(price)
+      },
+      company
     };
 
     if (search) {
@@ -172,7 +172,7 @@ export const createProduct = tryCatch(
       company
     });
 
-    await invalidateCache({ product: true });
+    await invalidateCache({ product: true, admin: true });
 
     return res.status(201).json({
       success: true,
@@ -232,7 +232,7 @@ export const updateProduct = tryCatch(async (req, res, next) => {
 
   await product.save();
 
-  await invalidateCache({ product: true, productId: String(product._id) });
+  await invalidateCache({ product: true, productId: String(product._id), admin: true });
 
   return res.status(200).json({
     success: true,
@@ -251,7 +251,7 @@ export const deleteProduct = tryCatch(
       console.log("Old Photo Deleted Successfully");
     });
     await product.deleteOne();
-    await invalidateCache({ product: true, productId: String(product._id) });
+    await invalidateCache({ product: true, productId: String(product._id), admin: true });
 
     return res.status(200).json({
       success: true,
