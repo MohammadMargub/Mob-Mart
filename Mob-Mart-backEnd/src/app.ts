@@ -3,13 +3,16 @@ import express from "express";
 import userRoutes from "./routes/userRouter.js";
 import productRoutes from "./routes/productsRouter.js";
 import orderRoutes from "./routes/orderRouter.js";
-import paymentRoutes from "./routes/payment.js";
-import statistics from "./routes/statistics.js";
+import paymentRoutes from "./routes/paymentRouter.js";
+import statistics from "./routes/statisticsRouter.js";
 import { connectDB } from "./database/database.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import NodeCache from "node-cache";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cors from "cors";
+
+import { decryptRequestBody } from "./utils/encryption.js";
 
 dotenv.config({ path: "./config.env" });
 
@@ -22,6 +25,8 @@ connectDB();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(decryptRequestBody);
+app.use(cors());
 
 app.get("/", (_req, res) => {
   res.send(`API is working wait plz`);

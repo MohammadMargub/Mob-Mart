@@ -40,28 +40,40 @@ export interface BaseQuery {
 }
 
 export type InvalidateCacheProps = {
-  product?: boolean;
-  order?: boolean;
   admin?: boolean;
-  userId?: string;
+  order?: boolean;
   orderId?: string;
+  product?: boolean;
   productId?: string | string[];
+  userId?: string;
 };
 
 export type orderItemType = {
   name: string;
   photo: string;
   price: number;
-  quantity: number;
   productId: string;
+  quantity: number;
 };
 
 export type shippingInfoType = {
   address: string;
   city: string;
-  state: string;
   country: string;
   pincode: number;
+  state: string;
+};
+
+export interface MyDocument extends Document {
+  createdAt: Date;
+  discount?: number;
+  total?: number;
+}
+export type FuncProps = {
+  length: number;
+  docArr: MyDocument[];
+  today: Date;
+  property?: "discount" | "total";
 };
 
 export interface Iuser extends Document {
@@ -76,20 +88,21 @@ export interface Iuser extends Document {
   updatedAt: Date;
   category: string;
   age: number;
-  total: number;
 }
 
 export interface NewOrderRequestBody {
-  shippingInfo: {};
-  user: string;
+  company: string;
+  createdAt: Date;
+  discount: number;
+  orderItems: orderItemType[];
   price: number;
+  shippingCharges: number;
+  shippingInfo: {};
   subTotal: number;
   tax: number;
-  shippingCharges: number;
-  discount: number;
   total: number;
-  orderItems: orderItemType[];
-  company: string;
+  user: string;
+  today: Date;
 }
 
 export type ControllerType = (

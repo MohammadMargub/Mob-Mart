@@ -4,18 +4,19 @@ import {
   getDashboardStats,
   getLineCharts,
   getPieCharts
-} from "../controllers/statistics.js";
+} from "../controllers/statisticsController.js";
+import { adminOnly } from "../middlewares/auth.js";
 
 const app = express.Router();
 
 /* COMPLETE URL IS http://localhost:7000/api/v1/statistics/stats */
-app.get("/stats", getDashboardStats);
+app.get("/stats", adminOnly, getDashboardStats);
 
 /* COMPLETE URL IS http://localhost:7000/api/v1/statistics/pie */
-app.get("/pie", getPieCharts);
+app.get("/pie", adminOnly, getPieCharts);
 
 /* COMPLETE URL IS http://localhost:7000/api/v1/statistics/bar */
-app.get("/bar", getBarCharts);
+app.get("/bar", adminOnly, getBarCharts);
 
 /* COMPLETE URL IS http://localhost:7000/api/v1/statistics/line */
 app.get("/line", getLineCharts);

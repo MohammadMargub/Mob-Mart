@@ -1,4 +1,4 @@
-import { InvalidateCacheProps, orderItemType } from "../types/types.js";
+import { FuncProps, InvalidateCacheProps, orderItemType } from "../types/types.js";
 import { myCache } from "../app.js";
 import { ProductsModel } from "../models/productsModel.js";
 
@@ -31,6 +31,10 @@ export const invalidateCache = async ({
     const orderKeys: string[] = ["all-orders", `My Orders-${userId}`, `order- ${orderId}`];
 
     myCache.del(orderKeys);
+  }
+
+  if (admin) {
+    myCache.del(["admin-stats", "admin-pie-charts", "admin-bar-charts", "admin-line-chart"]);
   }
 };
 
@@ -83,4 +87,25 @@ export const getInventories = async ({
   });
 
   return companyCount;
+};
+
+export const getChartData = ({ length, docArr, today, property }: FuncProps) => {
+  const data = new Array(length).fill(0);
+
+  docArr.forEach((i) => {
+    const creationDate = i.createdAt;
+    const monthDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
+
+    if (monthDiff < length) {
+      if (property) {
+        const value = Number(i[property]);
+        if (!isNaN(value)) {
+          data[length - monthDiff - 1] += value;
+        }
+      } else {
+        data[length - monthDiff - 1] += 1;
+      }
+    }
+  });
+  return data;
 };
