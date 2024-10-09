@@ -7,6 +7,14 @@ export type CartItem = {
   stock: number;
 };
 
+export interface Product {
+  name: string;
+  category: string;
+  photo: string;
+  _id: string;
+  price: number;
+}
+
 export interface User {
   _id: string;
   name: string;
