@@ -13,7 +13,7 @@ import { auth } from "../firebase/firebase";
 import toast from "react-hot-toast";
 
 interface PropsType {
-  user: User | any;
+  user: User | null;
 }
 
 const Header = ({ user }: PropsType) => {

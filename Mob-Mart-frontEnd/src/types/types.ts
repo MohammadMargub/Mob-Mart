@@ -8,11 +8,13 @@ export type CartItem = {
 };
 
 export interface Product {
+  stocks: number;
   name: string;
   category: string;
   photo: string;
   _id: string;
   price: number;
+  company: string;
 }
 
 export interface User {

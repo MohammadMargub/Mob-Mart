@@ -37,6 +37,11 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
+      const existingUserResponse = await getUser(user.uid);
+      if (existingUserResponse) {
+        toast.success("User already exists!");
+        return;
+      }
       const res = await login({
         _id: user.uid,
         name: user.displayName!,

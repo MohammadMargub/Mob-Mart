@@ -1,8 +1,17 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import ProductCart from "../components/product-cart";
+import { productAPI, useLatestProductsQuery } from "../redux/api/productAPI";
+import { Skeleton } from "../components/loader";
+import toast from "react-hot-toast";
 
 const Home = () => {
+  const { data, isLoading, isError, error } = useLatestProductsQuery();
+
+  if (isError) {
+    toast.error("Can't Fetch the Products");
+  }
+
+  console.log(productAPI);
   const addToCartHandler = () => {};
 
   return (
@@ -15,14 +24,21 @@ const Home = () => {
         </Link>
       </h1>
       <main>
-        <ProductCart
-          productId="aaa"
-          name="Samsung Galaxy S24 ultra"
-          price={121000}
-          stock={222}
-          handler={addToCartHandler}
-          photo="https://m.media-amazon.com/images/I/71RVuBs3q9L._AC_UY327_FMwebp_QL65_.jpg"
-        />
+        {isLoading ? (
+          <Skeleton />
+        ) : (
+          data?.products.map((i: any) => (
+            <ProductCart
+              key={i._id}
+              productId={i._id}
+              name={`${i.company} ${i.name}`}
+              price={i.price}
+              stock={i.stock}
+              handler={addToCartHandler}
+              photo={i.photo}
+            />
+          ))
+        )}
       </main>
     </div>
   );
