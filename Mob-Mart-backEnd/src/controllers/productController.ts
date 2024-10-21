@@ -27,7 +27,7 @@ export const getLatestProduct = tryCatch(
 
 export const getProductCategory = tryCatch(
   async (_req: Request<{}, {}, NewProductRequestBody>, res: Response, _next: NextFunction) => {
-    const categories = await ProductsModel.distinct("category");
+    const categories = await ProductsModel.distinct("company");
 
     return res.status(200).json({
       success: true,
@@ -73,21 +73,22 @@ export const getSingleProduct = tryCatch(async (req, res, next) => {
 });
 
 export const getAllProducts = tryCatch(
-  async (req: Request<{}, {}, {}, SearchRequestQuery>, res: Response, next: NextFunction) => {
+  async (req: Request<{}, {}, {}, SearchRequestQuery>, res: Response, _next: NextFunction) => {
     const { company, price, search, sort } = req.query;
 
     const page = Number(req.query.page) || 1;
-
     const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
-
     const skip = limit * (page - 1);
 
-    const baseQuery: BaseQuery = {
-      price: {
-        $lte: Number(price)
-      },
-      company
-    };
+    const baseQuery: BaseQuery = {};
+
+    if (price && !isNaN(Number(price))) {
+      baseQuery.price = { $lte: Number(price) };
+    }
+
+    if (company) {
+      baseQuery.company = company;
+    }
 
     if (search) {
       baseQuery.name = {
@@ -96,17 +97,12 @@ export const getAllProducts = tryCatch(
       };
     }
 
-    if (price) {
-      baseQuery.price = {
-        $lte: Number(price)
-      };
-    }
-    if (company) {
-      baseQuery.company = company;
-    }
+    console.log("Base Query:", baseQuery);
+    console.log("Pagination - Page:", page, "Limit:", limit, "Skip:", skip);
+    console.log("Incoming Query Parameters:", req.query);
 
     const productsPromise = ProductsModel.find(baseQuery)
-      .sort(sort && { price: sort === "asc" ? 1 : -1 })
+      .sort(sort ? { price: sort === "asc" ? 1 : -1 } : {})
       .limit(limit)
       .skip(skip);
 
@@ -153,7 +149,6 @@ export const createProduct = tryCatch(
 
     const photo = req.file;
     console.log(photo);
-
     if (!photo) {
       return next(new ErrorHandler("Please add a photo", 400));
     }
@@ -164,11 +159,13 @@ export const createProduct = tryCatch(
       });
       return;
     }
+    const imagePath = `/uploads/${photo.filename}`;
+
     await ProductsModel.create({
       name,
       price,
       stocks,
-      photo: photo.path,
+      photo: imagePath,
       company
     });
 

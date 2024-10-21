@@ -1,6 +1,6 @@
 projectKey=Mob_Mart_BE
 serverUrl=http://localhost:9000
-serverVersion=10.6.0.92116
+serverVersion=10.7.0.96327
 dashboardUrl=http://localhost:9000/dashboard?id=Mob_Mart_BE
-ceTaskId=eed75b23-ca10-4b1e-b428-974d1ad9513b
-ceTaskUrl=http://localhost:9000/api/ce/task?id=eed75b23-ca10-4b1e-b428-974d1ad9513b
+ceTaskId=39a36009-b6e6-41e6-b67e-f96a7c30331b
+ceTaskUrl=http://localhost:9000/api/ce/task?id=39a36009-b6e6-41e6-b67e-f96a7c30331b

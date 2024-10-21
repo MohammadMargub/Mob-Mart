@@ -1,18 +1,18 @@
 import express from "express";
-
-import userRoutes from "./routes/userRouter.js";
+import { decryptRequestBody } from "./utils/encryption.js";
+import { errorMiddleware } from "./middlewares/error.js";
 import productRoutes from "./routes/productsRouter.js";
-import orderRoutes from "./routes/orderRouter.js";
 import paymentRoutes from "./routes/paymentRouter.js";
 import statistics from "./routes/statisticsRouter.js";
 import { connectDB } from "./database/database.js";
-import { errorMiddleware } from "./middlewares/error.js";
+import orderRoutes from "./routes/orderRouter.js";
+import userRoutes from "./routes/userRouter.js";
 import NodeCache from "node-cache";
-import dotenv from "dotenv";
 import morgan from "morgan";
+import dotenv from "dotenv";
 import cors from "cors";
-
-import { decryptRequestBody } from "./utils/encryption.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config({ path: "./config.env" });
 
@@ -28,6 +28,9 @@ app.use(morgan("dev"));
 app.use(decryptRequestBody);
 app.use(cors());
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.get("/", (_req, res) => {
   res.send(`API is working wait plz`);
 });
@@ -42,7 +45,9 @@ app.use("/api/v1/payment", paymentRoutes);
 
 app.use("/api/v1/statistics", statistics);
 
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// app.use("/uploads", express.static("uploads"));
 
 app.use(errorMiddleware);
 
