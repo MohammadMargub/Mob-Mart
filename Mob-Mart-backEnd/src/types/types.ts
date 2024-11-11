@@ -90,6 +90,10 @@ export interface Iuser extends Document {
   age: number;
 }
 
+export interface JwtPayload {
+  id: string;
+}
+
 export interface NewOrderRequestBody {
   company: string;
   createdAt: Date;
