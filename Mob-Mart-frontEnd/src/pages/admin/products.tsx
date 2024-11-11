@@ -7,10 +7,11 @@ import TableHOC from "../../components/admin/TableHOC";
 import { useAllProductsQuery } from "../../redux/api/productAPI";
 import toast from "react-hot-toast";
 import { customError } from "../../types/api-types";
-import { useSelector } from "react-redux";
+
 import { UserReducerInitialState } from "../../types/reducer-types";
 import { Skeleton } from "../../components/loader";
-import { server } from "../../redux/store";
+import { RootState, server } from "../../redux/store";
+import { useSelector } from "react-redux";
 
 interface DataType {
   photo: ReactElement;
@@ -44,10 +45,9 @@ const columns: Column<DataType>[] = [
 ];
 
 const Products = () => {
-  const { user } = useSelector(
+  const user = useSelector(
     (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
-
   const { data, isError, isLoading, error } = useAllProductsQuery(user?._id!);
 
   const [rows, setRows] = useState<DataType[]>([]);
@@ -58,7 +58,7 @@ const Products = () => {
         const imageUrl = `${server}${i.photo}`;
 
         return {
-          photo: <img src={imageUrl} alt="Image" />,
+          photo: <img src={imageUrl} alt="image of a mobile" />,
           name: i.name,
           stock: i.stocks,
           price: i.price,

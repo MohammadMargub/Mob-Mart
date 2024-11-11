@@ -13,7 +13,7 @@ type ResType =
     };
 
 export const responseToast = (
-  res: ResType,
+  res: any,
   navigate: NavigateFunction | null,
   url: string
 ) => {

@@ -41,9 +41,10 @@ export const productAPI = createApi({
         return base;
       },
     }),
-    newProducts: builder.mutation<MessageResponse, NewProductRequest>({
+    newProduct: builder.mutation<MessageResponse, NewProductRequest>({
       query: ({ formData, id }) => ({
         url: `new?id=${id}`,
+        // url: `new?id=ABC-123`,
         method: "POST",
         body: formData,
       }),
@@ -56,6 +57,6 @@ export const {
   useAllProductsQuery,
   useCategoriesQuery,
   useSearchProductsQuery,
-  useNewProductsMutation,
   useAllMobileQuery,
+  useNewProductMutation,
 } = productAPI;

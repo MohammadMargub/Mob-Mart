@@ -28,7 +28,7 @@ const Search = () => {
     price: maxPrice,
   });
 
-  console.log("searchedData", searchedData);
+  console.log(searchedData, "searchedData");
 
   const addToCartHandler = () => {};
 
@@ -68,10 +68,9 @@ const Search = () => {
         <div>
           <h4>Max Price : {maxPrice || ""}</h4>
           <input
-            type=""
+            type="number"
             min={50}
-            max={0}
-            value={0}
+            value={maxPrice || ""}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
           />
         </div>

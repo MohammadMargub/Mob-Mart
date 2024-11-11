@@ -8,6 +8,8 @@ import Header from "../components/header";
 import Loader from "../components/loader";
 import NotFound from "../pages/notFound";
 import ProtectedRoute from "../components/protectedRoute";
+import { userReducer } from "../redux/reducer/userReducer";
+import { RootState } from "../redux/store";
 
 const Home = lazy(() => import("../pages/home"));
 const Search = lazy(() => import("../pages/search"));
@@ -36,12 +38,12 @@ const TransactionManagement = lazy(
 
 const AppRouter = () => {
   const { user, loading } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+    (state: RootState) => state.user || { user: null, loading: false }
   );
-
-  // if (loading) {
-  //   return <Loader />;
-  // }
+  console.log("Router user", user);
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Router>
@@ -55,7 +57,7 @@ const AppRouter = () => {
           <Route
             path="/login"
             element={
-              <ProtectedRoute isAuthenticated={user ? false : true}>
+              <ProtectedRoute isAuthenticated={!user}>
                 <Login />
               </ProtectedRoute>
             }
@@ -63,8 +65,9 @@ const AppRouter = () => {
           <Route
             element={
               <ProtectedRoute
-                isAuthenticated={user ? true : false}
-                admin={user?.role === "admin" ? true : false}
+                isAuthenticated={!!user}
+                admin={user?.role === "admin"}
+                adminOnly={true}
               />
             }
           >
@@ -76,9 +79,9 @@ const AppRouter = () => {
           <Route
           // element={
           //   <ProtectedRoute
-          //     isAuthenticated={true}
+          //     isAuthenticated={!!user}
           //     adminOnly={true}
-          //     admin={user?.role === "admin" ? true : false}
+          //     admin={user?.role === "admin"}
           //   />
           // }
           >
@@ -92,8 +95,6 @@ const AppRouter = () => {
             <Route path="/admin/chart/line" element={<Linecharts />} />
             {/* Apps */}
             <Route path="/admin/app/coupon" element={<Coupon />} />
-            {/* <Route path="/admin/app/stopwatch" element={<Stopwatch />} /> */}
-            {/* <Route path="/admin/app/toss" element={<Toss />} /> */}
 
             {/* Management */}
             <Route path="/admin/product/new" element={<NewProduct />} />

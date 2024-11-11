@@ -16,17 +16,22 @@ export const userAPI = createApi({
         body: user,
       }),
     }),
+    // getUser: builder.query<User, string>({
+    //   query: (id) => `${id}`,
+    // }),
   }),
 });
 
 export const getUser = async (id: string) => {
   try {
-    const { data } = await axios.get(
+    const { data }: { data: User } = await axios.get(
       `${import.meta.env.VITE_SERVER}/api/v1/user/${id}`
     );
 
     return data;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const { useLoginMutation } = userAPI;

@@ -8,7 +8,7 @@ const app = express.Router();
 app.post("/new", newUser);
 
 // get all user Route
-app.get("/all", adminOnly, getAllUsers);
+app.get("/all", getAllUsers);
 
 // get user by the ID Route
 app.route("/:id").get(getUser).delete(adminOnly, deleteUser);

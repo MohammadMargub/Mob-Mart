@@ -1,37 +1,48 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { useSelector } from "react-redux";
 import { UserReducerInitialState } from "../../../types/reducer-types";
 import {
   useAllMobileQuery,
-  useNewProductsMutation,
+  useNewProductMutation,
 } from "../../../redux/api/productAPI";
 import { responseToast } from "../../../utils/features";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { RootState } from "../../../redux/store";
+import { MessageResponse } from "../../../types/api-types";
 
-const NewProduct = (p0: { id: string; formData: FormData }) => {
+const NewProduct = () => {
   const [name, setName] = useState<string>("");
   const [company, setCompany] = useState<string>("");
-  const [price, setPrice] = useState<number>();
-  const [stock, setStock] = useState<number>();
+  const [price, setPrice] = useState<number | string>(0);
+  const [stocks, setStocks] = useState<number | string>(0);
   const [photoPrev, setPhotoPrev] = useState<string>("");
   const [photo, setPhoto] = useState<File>();
+
   const navigate = useNavigate();
 
-  const [createNewProduct] = useNewProductsMutation();
+  const [createNewProduct] = useNewProductMutation<MessageResponse>();
 
   const { data, error, isLoading } = useAllMobileQuery();
 
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  const { user, loading } = useSelector(
+    (state: RootState) => state.user || { user: null, loading: false }
   );
-  console.log("Current User:", user);
+  useEffect(() => {
+    if (!user) {
+      console.error("User is not authenticated");
+      toast.error("User must be logged in to create a product.");
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file: File | undefined = e.target.files?.[0];
 
     if (file) {
-      const reader = new FileReader();
+      setPhoto(file);
+      const reader: FileReader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
@@ -41,52 +52,44 @@ const NewProduct = (p0: { id: string; formData: FormData }) => {
       };
     }
   };
-  console.log("User ID:", user?._id);
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Log the values before checking the fields
-    console.log("Name:", name);
-    console.log("Price:", price);
-    console.log("Stock:", stock);
-    console.log("Company:", company);
-    console.log("Photo:", photo);
-
-    if (!name || !price || !stock || !company || !photo) {
-      console.error("Missing fields");
+    if (!user) {
+      console.error("User ID is undefined");
+      toast.error("User must be logged in to create a product.");
       return;
     }
 
     const formData = new FormData();
+
     formData.set("name", name);
-    formData.set("price", price.toString());
-    formData.set("stock", stock.toString());
-    formData.set("photo", photo);
-    formData.set("company", company);
+    formData.set("price", price?.toString() || "10000");
+    formData.set("stocks", stocks?.toString() || "1");
+    formData.append("company", company);
+
+    if (photo) {
+      formData.set("photo", photo);
+    } else {
+      console.error("Photo is not defined");
+      toast.error("Please upload a photo.");
+      return;
+    }
 
     try {
-      const res = await createNewProduct({ id: user?._id!, formData }).unwrap();
-      console.log("API Response:", res);
-      responseToast(res, navigate, "/admin/product");
+      const res = await createNewProduct({
+        formData,
+        id: user._id,
+      }).unwrap();
+
+      toast.success(res.message);
+      navigate("/admin/product");
     } catch (error) {
-      console.error("Failed to create product:", error);
+      console.error("Product creation failed:", error);
+      toast.error("Product creation failed");
     }
   };
-
-  // const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!name || !price || !stock || !company || !photo) return;
-  //   const formData = new FormData();
-  //   formData.set("name", name);
-  //   formData.set("price", price.toString());
-  //   formData.set("stock", stock.toString());
-  //   formData.set("photo", photo);
-  //   formData.set("company", company);
-
-  //   const res = await createNewProduct({ id: user?._id!, formData });
-  //   responseToast(res, navigate, "/admin/product");
-  // };
 
   return (
     <div className="admin-container">
@@ -111,18 +114,22 @@ const NewProduct = (p0: { id: string; formData: FormData }) => {
                 required
                 type="number"
                 placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                value={price || ""}
+                onChange={(e) =>
+                  setPrice(e.target.value ? Number(e.target.value) : 0)
+                }
               />
             </div>
             <div>
-              <label htmlFor="stock">Stock</label>
+              <label htmlFor="stocks">stocks</label>
               <input
                 required
                 type="number"
-                placeholder="Stock"
-                value={stock}
-                onChange={(e) => setStock(Number(e.target.value))}
+                placeholder="stocks"
+                value={stocks}
+                onChange={(e) =>
+                  setStocks(e.target.value ? Number(e.target.value) : 0)
+                }
               />
             </div>
 

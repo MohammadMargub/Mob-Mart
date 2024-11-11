@@ -14,9 +14,9 @@ import { adminOnly } from "../middlewares/auth.js";
 
 const app = express.Router();
 
-// product create route API Sample  http://localhost:7000/api/v1/products/End point in all of this which you wanted to add
+// product create route API Sample  http://localhost:7000/api/v1/products/EndPoint in all of this which you wanted to add
 
-app.post("/new", adminOnly, singleUpload, createProduct);
+app.post("/new", singleUpload, createProduct);
 
 app.get("/latest", getLatestProduct);
 

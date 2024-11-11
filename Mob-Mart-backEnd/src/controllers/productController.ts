@@ -1,11 +1,118 @@
+import { rm } from "fs";
 import { Request, Response, NextFunction } from "express";
 import { tryCatch } from "../middlewares/error.js";
 import { BaseQuery, NewProductRequestBody, SearchRequestQuery } from "../types/types.js";
 import { ProductsModel } from "../models/productsModel.js";
 import ErrorHandler from "../utils/utility-class.js";
-import { rm } from "fs";
 import { myCache } from "../app.js";
 import { invalidateCache } from "../utils/features.js";
+
+export const createProduct = tryCatch(async (req, res, next) => {
+  if (!req.file) {
+    return next(new ErrorHandler("Please add a photo", 400));
+  }
+
+  const { name, price, stocks, company } = req.body;
+
+  if (!name || !price || !stocks || !company) {
+    rm(req.file.path, () => {
+      return next(new ErrorHandler("Please Enter All Fields", 400));
+    });
+    return;
+  }
+
+  const imagePath = `/uploads/${req.file.filename}`;
+
+  await ProductsModel.create({
+    name,
+    price,
+    stocks,
+    photo: imagePath,
+    company
+  });
+
+  await invalidateCache({ product: true, admin: true });
+
+  return res.status(201).json({
+    success: true,
+    message: "ProductsModel Created Successfully"
+  });
+});
+
+export const updateProduct = tryCatch(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, price, stocks, company } = req.body;
+  const photo = req.file;
+
+  const product = await ProductsModel.findById(id);
+  if (!product) {
+    return next(new ErrorHandler("ProductsModel Not Found", 404));
+  }
+
+  if (
+    name === undefined &&
+    price === undefined &&
+    stocks === undefined &&
+    company === undefined &&
+    !photo
+  ) {
+    return next(
+      new ErrorHandler("At least one field or a new photo is required to update the product.", 400)
+    );
+  }
+
+  if (name !== undefined) {
+    product.name = name;
+  }
+  if (price !== undefined) {
+    product.price = price;
+  }
+  if (stocks !== undefined) {
+    product.stocks = stocks;
+  }
+  if (company !== undefined) {
+    product.company = company;
+  }
+
+  if (photo) {
+    rm(product.photo, (err) => {
+      if (err) {
+        return next(new ErrorHandler("Error deleting old photo", 500));
+      }
+    });
+
+    product.photo = photo.filename;
+  }
+
+  await product.save();
+
+  await invalidateCache({ product: true, productId: String(product._id), admin: true });
+
+  return res.status(200).json({
+    success: true,
+    message: "ProductsModel Updated Successfully",
+    product
+  });
+});
+
+export const deleteProduct = tryCatch(
+  async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
+    const product = await ProductsModel.findById((req.params as any).id);
+    if (!product) {
+      return next(new ErrorHandler("ProductsModel Not Found", 404));
+    }
+    rm(product.photo, () => {
+      console.log("Old Photo Deleted Successfully");
+    });
+    await product.deleteOne();
+    await invalidateCache({ product: true, productId: String(product._id), admin: true });
+
+    return res.status(200).json({
+      success: true,
+      message: "ProductsModel Deleted Successfully"
+    });
+  }
+);
 
 export const getLatestProduct = tryCatch(
   async (_req: Request<{}, {}, NewProductRequestBody>, res: Response, _next: NextFunction) => {
@@ -14,7 +121,9 @@ export const getLatestProduct = tryCatch(
     if (myCache.has("latest-product")) {
       products = JSON.parse(myCache.get("latest-product")!);
     } else {
-      products = await ProductsModel.find({}).sort({ createdAt: -1 }).limit(5);
+      products = await ProductsModel.find({ isDeleted: { $ne: true } })
+        .sort({ createdAt: -1 })
+        .limit(5);
       myCache.set("latest-product", JSON.stringify(products));
     }
 
@@ -97,10 +206,6 @@ export const getAllProducts = tryCatch(
       };
     }
 
-    console.log("Base Query:", baseQuery);
-    console.log("Pagination - Page:", page, "Limit:", limit, "Skip:", skip);
-    console.log("Incoming Query Parameters:", req.query);
-
     const productsPromise = ProductsModel.find(baseQuery)
       .sort(sort ? { price: sort === "asc" ? 1 : -1 } : {})
       .limit(limit)
@@ -137,122 +242,6 @@ export const getAllMobile = tryCatch(
     return res.status(200).json({
       success: true,
       mobileCompanies
-    });
-  }
-);
-
-export const createProduct = tryCatch(
-  async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
-    const { name, price, stocks, company } = req.body;
-
-    console.log("lll", name, price, stocks, company);
-
-    const photo = req.file;
-    console.log(photo);
-    if (!photo) {
-      return next(new ErrorHandler("Please add a photo", 400));
-    }
-    if (!name || !price || !stocks || !photo || !company) {
-      rm(photo.path, () => {
-        console.log("Deleted");
-        return next(new ErrorHandler("Please Enter All Fields", 400));
-      });
-      return;
-    }
-    const imagePath = `/uploads/${photo.filename}`;
-
-    await ProductsModel.create({
-      name,
-      price,
-      stocks,
-      photo: imagePath,
-      company
-    });
-
-    await invalidateCache({ product: true, admin: true });
-
-    return res.status(201).json({
-      success: true,
-      message: "ProductsModel Created Successfully"
-    });
-  }
-);
-
-export const updateProduct = tryCatch(async (req, res, next) => {
-  const { id } = req.params;
-  const { name, price, stocks, company, category } = req.body;
-  const photo = req.file;
-
-  // Log the incoming fields
-  console.log("Line number 86", name, price, stocks, company, category);
-
-  const product = await ProductsModel.findById(id);
-  if (!product) {
-    return next(new ErrorHandler("ProductsModel Not Found", 404));
-  }
-
-  if (
-    name === undefined &&
-    price === undefined &&
-    stocks === undefined &&
-    company === undefined &&
-    !photo
-  ) {
-    return next(
-      new ErrorHandler("At least one field or a new photo is required to update the product.", 400)
-    );
-  }
-
-  if (name !== undefined) {
-    product.name = name;
-  }
-  if (price !== undefined) {
-    product.price = price;
-  }
-  if (stocks !== undefined) {
-    product.stocks = stocks;
-  }
-  if (company !== undefined) {
-    product.company = company;
-  }
-
-  if (photo) {
-    rm(product.photo, (err) => {
-      if (err) {
-        return next(new ErrorHandler("Error deleting old photo", 500));
-      }
-      console.log("Old Photo Deleted");
-    });
-
-    product.photo = photo.filename;
-  }
-
-  await product.save();
-
-  await invalidateCache({ product: true, productId: String(product._id), admin: true });
-
-  return res.status(200).json({
-    success: true,
-    message: "ProductsModel Updated Successfully",
-    product
-  });
-});
-
-export const deleteProduct = tryCatch(
-  async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
-    const product = await ProductsModel.findById((req.params as any).id);
-    if (!product) {
-      return next(new ErrorHandler("ProductsModel Not Found", 404));
-    }
-    rm(product.photo, () => {
-      console.log("Old Photo Deleted Successfully");
-    });
-    await product.deleteOne();
-    await invalidateCache({ product: true, productId: String(product._id), admin: true });
-
-    return res.status(200).json({
-      success: true,
-      message: "ProductsModel Deleted Successfully"
     });
   }
 );

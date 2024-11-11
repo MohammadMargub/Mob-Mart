@@ -1,6 +1,7 @@
 import { User } from "./types";
 
 export interface UserReducerInitialState {
+  _id: any;
   user: User | null;
   loading: boolean;
 }
