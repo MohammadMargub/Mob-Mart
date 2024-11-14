@@ -1,32 +1,29 @@
 import { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { UserReducerInitialState } from "../types/reducer-types";
 import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import Login from "../pages/login";
 import Header from "../components/header";
 import Loader from "../components/loader";
 import NotFound from "../pages/notFound";
-import ProtectedRoute from "../components/protectedRoute";
-import { userReducer } from "../redux/reducer/userReducer";
 import { RootState } from "../redux/store";
+import ProtectedRoute from "../components/protectedRoute";
+import { Skeleton } from "../components/loader";
 
+const Cart = lazy(() => import("../pages/cart"));
 const Home = lazy(() => import("../pages/home"));
 const Search = lazy(() => import("../pages/search"));
-const Cart = lazy(() => import("../pages/cart"));
+const Orders = lazy(() => import("../pages/orders"));
 const Shipping = lazy(() => import("../pages/shipping"));
-
-const Dashboard = lazy(() => import("../pages/admin/dashboard"));
 const Products = lazy(() => import("../pages/admin/products"));
+const Coupon = lazy(() => import("../pages/admin/apps/coupon"));
+const Dashboard = lazy(() => import("../pages/admin/dashboard"));
 const Customers = lazy(() => import("../pages/admin/customers"));
+const OrderDetails = lazy(() => import("../pages/orderDetails"));
 const Transaction = lazy(() => import("../pages/admin/transaction"));
 const Barcharts = lazy(() => import("../pages/admin/charts/barcharts"));
 const Piecharts = lazy(() => import("../pages/admin/charts/piecharts"));
 const Linecharts = lazy(() => import("../pages/admin/charts/linecharts"));
-const Coupon = lazy(() => import("../pages/admin/apps/coupon"));
-const Orders = lazy(() => import("../pages/orders"));
-
-const OrderDetails = lazy(() => import("../pages/orderDetails"));
 
 const NewProduct = lazy(() => import("../pages/admin/management/newproduct"));
 const ProductManagement = lazy(
@@ -40,7 +37,7 @@ const AppRouter = () => {
   const { user, loading } = useSelector(
     (state: RootState) => state.user || { user: null, loading: false }
   );
-  console.log("Router user", user);
+
   if (loading) {
     return <Loader />;
   }
@@ -57,19 +54,13 @@ const AppRouter = () => {
           <Route
             path="/login"
             element={
-              <ProtectedRoute isAuthenticated={!user}>
+              <ProtectedRoute isAuthenticated={user ? true : false}>
                 <Login />
               </ProtectedRoute>
             }
           />
           <Route
-            element={
-              <ProtectedRoute
-                isAuthenticated={!!user}
-                admin={user?.role === "admin"}
-                adminOnly={true}
-              />
-            }
+            element={<ProtectedRoute isAuthenticated={user ? true : false} />}
           >
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
@@ -77,13 +68,13 @@ const AppRouter = () => {
           </Route>
           {/* Admin Logs */}
           <Route
-          // element={
-          //   <ProtectedRoute
-          //     isAuthenticated={!!user}
-          //     adminOnly={true}
-          //     admin={user?.role === "admin"}
-          //   />
-          // }
+            element={
+              <ProtectedRoute
+                isAuthenticated={true}
+                adminOnly={true}
+                admin={user?.role == "admin" ? true : false}
+              />
+            }
           >
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/product" element={<Products />} />
