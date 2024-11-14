@@ -5,11 +5,13 @@ import { Skeleton } from "../components/loader";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { UserReducerInitialState } from "../types/reducer-types";
+import { RootState } from "../redux/store";
 
 const Home = () => {
   const user = useSelector(
     (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
+
   const { data, isLoading, isError, error } = useLatestProductsQuery();
 
   if (isError) {
