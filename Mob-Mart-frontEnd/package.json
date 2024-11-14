@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky",
+    "check-format": "prettier --check .",
+    "format": "prettier --write .",
+    "sonar:scan": "../Mob-Mart-frontEnd/sonar.bat"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
@@ -37,6 +41,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "husky": "^9.1.6",
     "redux-logger": "^3.0.6",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
