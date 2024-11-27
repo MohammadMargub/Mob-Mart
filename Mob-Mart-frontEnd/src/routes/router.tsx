@@ -34,9 +34,10 @@ const TransactionManagement = lazy(
 );
 
 const AppRouter = () => {
-  const { user, loading } = useSelector(
-    (state: RootState) => state.user || { user: null, loading: false }
-  );
+  const { user, loading } = useSelector((state: RootState) => state.user);
+
+  console.log("Router User", user);
+  console.log("User Role", user?.role);
 
   if (loading) {
     return <Loader />;
@@ -54,14 +55,13 @@ const AppRouter = () => {
           <Route
             path="/login"
             element={
-              <ProtectedRoute isAuthenticated={user ? true : false}>
+              <ProtectedRoute isAuthenticated={user ? false : true}>
                 <Login />
               </ProtectedRoute>
             }
           />
-          <Route
-            element={<ProtectedRoute isAuthenticated={user ? true : false} />}
-          >
+          {/* Protected Route */}
+          <Route element={<ProtectedRoute isAuthenticated={!!user} />}>
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
@@ -70,9 +70,9 @@ const AppRouter = () => {
           <Route
             element={
               <ProtectedRoute
-                isAuthenticated={true}
+                isAuthenticated={!!user}
                 adminOnly={true}
-                admin={user?.role == "admin" ? true : false}
+                admin={user?.role === "admin"}
               />
             }
           >

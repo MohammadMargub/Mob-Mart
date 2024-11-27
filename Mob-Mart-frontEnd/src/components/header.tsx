@@ -6,11 +6,13 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User } from "../types/types";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { userLogout } from "../redux/reducer/userReducer";
 
 interface PropsType {
   user: User | null;
@@ -18,6 +20,13 @@ interface PropsType {
 
 const Header = ({ user }: PropsType) => {
   const [isopen, setIsopen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    dispatch(userLogout());
+    navigate("/login");
+  };
 
   const logoutHandler = async () => {
     try {
@@ -57,7 +66,7 @@ const Header = ({ user }: PropsType) => {
                 Orders
               </Link>
               <button onClick={() => logoutHandler}>
-                <FaSignOutAlt />
+                <FaSignOutAlt onClick={logout} />
               </button>
             </div>
           </dialog>

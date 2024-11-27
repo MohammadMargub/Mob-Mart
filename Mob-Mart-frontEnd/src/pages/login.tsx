@@ -36,6 +36,8 @@ const Login = () => {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
 
+      console.log("39 Login FILE ", user);
+
       // Attempt to log in via your API
       const res = await login({
         _id: user.uid,
@@ -50,14 +52,17 @@ const Login = () => {
       console.log("Login API Response:", res);
 
       if ("data" in res && res.data) {
+        console.log("User data being dispatched to Redux:", res.data.user);
+
         dispatch(userExist(res.data.user));
         toast.success("Sign in Successful!");
         navigate("/");
       } else {
         const userDetails = await getUser(user.uid);
         if (userDetails) {
+          console.log("Login API failed, fetching user details manually...");
           dispatch(userExist(userDetails));
-          console.log("User Details from API:", userDetails);
+
           toast.success("Sign in Successful!");
           navigate("/");
         } else {
@@ -71,43 +76,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  // const loginHandler = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const provider = new GoogleAuthProvider();
-  //     const { user } = await signInWithPopup(auth, provider);
-  //     console.log("Google User Data:", user);
-  //     const res = await login({
-  //       _id: user.uid,
-  //       name: user.displayName!,
-  //       email: user.email!,
-  //       gender,
-  //       role: "user",
-  //       photo: user.photoURL!,
-  //       dob: date,
-  //     });
-
-  //     console.log("Login API Response:", res);
-
-  //     if ("data" in res) {
-  //       const userDetails = await getUser(user.uid);
-  //       if (userDetails) {
-  //         dispatch(userExist(userDetails));
-
-  //         toast.success("Sign in Successful!");
-  //         navigate("/");
-  //       } else {
-  //         toast.error("Failed to fetch user details.");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Sign in Error:", error);
-  //     toast.error("Sign in Failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <div className="login">

@@ -104,7 +104,7 @@ const Search = () => {
               <ProductCart
                 key={i._id}
                 productId={i._id}
-                name={i.name}
+                name={`${i.company} ${i.name}`}
                 price={i.price}
                 stock={i.stocks}
                 handler={addToCartHandler}
@@ -113,7 +113,6 @@ const Search = () => {
             ))}
           </div>
         )}
-
         {searchedData && searchedData?.totalPage > 1 && (
           <article>
             <button

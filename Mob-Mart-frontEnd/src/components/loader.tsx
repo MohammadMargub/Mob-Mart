@@ -4,6 +4,7 @@ const Loader = () => {
 
 export default Loader;
 
+// width and length is optional
 interface SkeletonProps {
   width?: string;
   length?: number;
